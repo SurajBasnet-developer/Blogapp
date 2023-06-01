@@ -8,6 +8,13 @@ const fetchData = async () => {
   return response.data;
 };
 
+const truncateContent = (content, maxLength) => {
+  if (content.length <= maxLength) {
+    return content;
+  }
+  return content.substr(0, maxLength) + "...";
+};
+
 const Blog = () => {
   const { data, isLoading, isError } = useQuery("posts", fetchData);
 
@@ -31,6 +38,8 @@ const Blog = () => {
           const title = post[1];
           const content = post[2];
 
+          const truncatedContent = truncateContent(content, 150);
+
           return (
             <div key={postId} className="max-w-sm bg-base-100 shadow-xl">
               <figure>
@@ -41,7 +50,7 @@ const Blog = () => {
               </figure>
               <div className="p-4">
                 <h2 className="text-lg font-bold">{title}</h2>
-                <p>{content}</p>
+                <p>{truncatedContent}</p>
                 <div className="flex justify-end mt-4">
                   <Link to={`/view/${postId}`}>
                     <button className="btn btn-primary">View</button>
